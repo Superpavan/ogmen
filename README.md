@@ -1,8 +1,8 @@
 # ogmen robotics
-## Topic assignment
-# Project Title
+#  assignment
+# Bot Description & Bot World
 
-**Bot Description & Bot World**: A simulation and visualization setup for the two-wheeled robot in ROS 2, integrating URDF and Gazebo with visualization tools like RViz.
+Bot Description & Bot World: A simulation and visualization setup for the two-wheeled robot in ROS 2, integrating URDF and Gazebo with visualization tools like RViz.
 
 This repository contains a URDF (Unified Robot Description Format) model of a mobile robot with a rectangular box body, two wheels (left and right), and a caster wheel. The robot is designed for simulation in ROS 2 and Gazebo, and it's a simple example for testing basic mobility and sensor setups.
 
