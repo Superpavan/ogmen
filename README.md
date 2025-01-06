@@ -55,7 +55,7 @@ source ~/ros2_ws/install/setup.bash
 
 Running the Robot in Gazebo
 To launch the robot model in Gazebo, use the following command. First, ensure you have a proper launch file (gazebo_launch_file.py) in the bot_description package:
-ros2 launch bot_description gazebo_launch_file.py
+ros2 launch bot_description spawn.launch
 This command should launch Gazebo with your robot model, where you can see the robot's simulation.
 
 Control the Robot
