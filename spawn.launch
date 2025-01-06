@@ -1,0 +1,47 @@
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.actions import Node
+from pathlib import Path
+
+def generate_launch_description():
+    # Define paths
+    package_path = Path('/home/superpavan/pavan_ws/src/bot_description')
+    urdf_file = package_path / 'urdf' / 'bot.urdf'
+    world_file = package_path / 'worlds' / 'empty.world'
+
+    return LaunchDescription([
+        # Launch Gazebo with the specified world
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                str(Path('/opt/ros/humble/share/gazebo_ros/launch/gazebo.launch.py'))
+            ),
+            launch_arguments={'world': str(world_file)}.items(),
+        ),
+
+        # Spawn the robot in Gazebo
+        Node(
+            package='gazebo_ros',
+            executable='spawn_entity.py',
+            arguments=[
+                '-entity', 'box_with_wheels_and_caster',  # Robot name
+                '-file', str(urdf_file),  # Path to URDF file
+                '-x', '0',  # Initial x position
+                '-y', '0',  # Initial y position
+                '-z', '0.0'  # Initial z position to align with ground
+            ],
+            output='screen'
+        ),
+
+        # Run robot_state_publisher to publish TF and robot_description
+        Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
+            output='screen',
+            parameters=[{'robot_description': urdf_file.read_text()}]
+        ),
+    ])
+
+
+

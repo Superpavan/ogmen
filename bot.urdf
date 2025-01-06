@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<robot name="bot">
+
+    
+    <material name="gray">
+        <color rgba="0.8 0.8 0.8 1"/>
+    </material>
+
+ 
+    <link name="base_link"/>
+
+    
+    <link name="main_box">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 0.2 0.1"/>
+            </geometry>
+            <material name="gray"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.2 0.2 0.1"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.0016" ixy="0" ixz="0" iyy="0.0016" iyz="0" izz="0.0016"/>
+        </inertial>
+    </link>
+	
+    <link name="left_wheel">
+        <visual>
+            <origin xyz="0.01 0.03 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.06" length="0.02"/>
+            </geometry>
+            <material name="gray"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.06" length="0.02"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/>
+            <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+        </inertial>
+    </link>
+	   <!-- Right Wheel -->
+    <link name="right_wheel">
+        <visual>
+            <origin xyz="0.01 0.03 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.06" length="0.02"/>
+            </geometry>
+            <material name="gray"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.06" length="0.02"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/>
+            <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+        </inertial>
+    </link>
+	    
+    <link name="caster_wheel">
+        <visual>
+            <origin xyz="0 .04 -0.02" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="0.021"/>
+            </geometry>
+            <material name="gray"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="0.03"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.1"/>
+            <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+        </inertial>
+    </link>
+
+
+    <!-- Joints -->
+    <joint name="base_to_box" type="fixed">
+        <parent link="base_link"/>
+        <child link="main_box"/>
+        <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </joint>
+    <joint name="left_joint" type="continuous">
+        <parent link="main_box"/>
+        <child link="left_wheel"/>
+        <origin xyz="0.11 0 0" rpy="0 1.5708 0"/>
+    </joint>
+
+    <joint name="right_joint" type="continuous">
+        <parent link="main_box"/>
+        <child link="right_wheel"/>
+        <origin xyz="-0.11 0 0" rpy="0 1.5708 0"/>
+    </joint>
+
+    <joint name="box_to_caster" type="fixed">
+        <parent link="main_box"/>
+        <child link="caster_wheel"/>
+        <origin xyz="0 -0.1 -0.029" rpy="0 0 0"/>
+    </joint>
+    
+    <transmission name="left_wheel_trans">
+        <type>SimpleTransmission</type>
+        <joint name="left_joint">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="left_wheel_motor">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </actuator>
+    </transmission>
+
+    <transmission name="right_wheel_trans">
+        <type>SimpleTransmission</type>
+        <joint name="right_joint">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="right_wheel_motor">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </actuator>
+    </transmission>
+
+    
+    <link name="lidar_link">
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.125"/>
+            <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+        </inertial>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.0508" length="0.25"/>
+            </geometry>
+        </collision>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.0508" length="0.25"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+        <parent link="main_box"/>
+        <child link="lidar_link"/>
+        <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    </joint>
+
+    <gazebo reference="lidar_link">
+        <sensor name="lidar" type="ray">
+            <always_on>true</always_on>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>120</samples>
+                        <resolution>1.0</resolution>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>15.0</max>
+                    <resolution>0.015</resolution>
+                </range>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                </noise>
+            </ray>
+            <plugin name="scan" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <remapping>~/out:=scan</remapping>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>lidar_link</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+<!-- Camera -->
+<link name="camera_link">
+    <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.125"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <box size="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="gray"/>
+    </visual>
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <box size="0.1 0.1 0.1"/>
+        </geometry>
+    </collision>
+</link>
+
+<joint name="camera_joint" type="fixed">
+    <parent link="main_box"/>
+    <child link="camera_link"/>
+    <origin xyz="0 0 0.2" rpy="0 0 0"/>
+</joint>
+
+<gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>true</visualize>
+        <update_rate>10</update_rate>
+        <camera>
+            <horizontal_fov>1.089</horizontal_fov>
+            <image>
+                <format>R8G8B8</format>
+                <width>640</width>
+                <height>480</height>
+            </image>
+            <clip>
+                <near>0.05</near>
+                <far>8.0</far>
+            </clip>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+            <frame_name>camera_link</frame_name>
+        </plugin>
+    </sensor>
+</gazebo>
+<gazebo>
+    <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+        <robotNamespace>/</robotNamespace>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <robotBaseFrame>base_link</robotBaseFrame>
+        <left_joint>left_joint</left_joint>
+        <right_joint>right_joint</right_joint>
+        <wheel_separation>0.2</wheel_separation>
+        <wheel_diameter>0.06</wheel_diameter>
+        <updateRate>50</updateRate>
+    </plugin>
+</gazebo>
+</robot>
