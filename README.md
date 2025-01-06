@@ -1,6 +1,5 @@
 # ogmen robotics
 #  assignment
-# Bot Description & Bot World
 
 Bot Description & Bot World: A simulation and visualization setup for the two-wheeled robot in ROS 2, integrating URDF and Gazebo with visualization tools like RViz.
 
