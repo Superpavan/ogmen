@@ -40,13 +40,12 @@ A catkin workspace or colcon workspace for building ROS 2 packages.
 Setup Instructions
 Clone this repository into your ROS 2 workspace:
 
-bash
-Copy code
+
 cd ~/ros2_ws/src
-git clone https://github.com/superpavan/bot_description.git
+
 Build the workspace:
 
-bash
+
 cd ~/ros2_ws
 colcon build --symlink-install
 
@@ -54,7 +53,7 @@ Source the workspace:
 source ~/ros2_ws/install/setup.bash
 
 Running the Robot in Gazebo
-To launch the robot model in Gazebo, use the following command. First, ensure you have a proper launch file (gazebo_launch_file.py) in the bot_description package:
+To launch the robot model in Gazebo, use the following command. First, ensure you have a proper launch file in the bot_description package:
 ros2 launch bot_description spawn.launch
 This command should launch Gazebo with your robot model, where you can see the robot's simulation.
 
