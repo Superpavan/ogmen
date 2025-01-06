@@ -35,27 +35,31 @@ Gazebo Integration: Ready-to-use with Gazebo for simulation, including sensor da
 Installation
 Prerequisites
 ROS 2 Humble.
-Gazebo 11.
+Gazeb0.
 A catkin workspace or colcon workspace for building ROS 2 packages.
 Setup Instructions
 Clone this repository into your ROS 2 workspace:
 
 
-cd ~/ros2_ws/src
+cd ~/pavan_ws/src
 
 Build the workspace:
+in src you should have these files
+bot_control, bot_decription, bot_world
+in bot_control/src/reading_laser.cpp
 
+cd ~/pavan_ws
+colcon build --packages-select
+after this
+colcon build --packages-select bot_description
+next have to source it :
+source install/setup.bash
 
-cd ~/ros2_ws
-colcon build --symlink-install
-
-Source the workspace:
-source ~/ros2_ws/install/setup.bash
-
-Running the Robot in Gazebo
-To launch the robot model in Gazebo, use the following command. First, ensure you have a proper launch file in the bot_description package:
+Running the Robot in Gazebo:
 ros2 launch bot_description spawn.launch
-This command should launch Gazebo with your robot model, where you can see the robot's simulation.
+
+After this launch rviz2 :
+ros2 launch bot_description rviz.launch
 
 Control the Robot
 To control the robot, you can use teleop_twist_keyboard for basic teleoperation or set up a controller for automated movement.
@@ -67,3 +71,8 @@ sudo apt install ros-humble-teleop-twist-keyboard
 
 Run the teleoperation node:
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
+
+In another terminal you have to run : ros2 topic list
+in that list check weather /scan node is there
+then : ros2 echo /scan 
+by this command read the lidar value
